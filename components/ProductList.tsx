@@ -19,32 +19,50 @@ interface Product {
   name: string;
   variant: string;
   price: string;
-  image: string;
+  image?: string;  // Made optional to avoid potential runtime errors
   oldPrice?: string;
 }
 
-const ProductCard: React.FC<{ product: Product; onBookmark: (id: number) => void }> = ({ product, onBookmark }) => {
-  const [quantity, setQuantity] = useState(1);
+interface ProductCardProps {
+  product: Product;
+  onBookmark: (id: number) => void;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, onBookmark }) => {
+  const [quantity, setQuantity] = useState<number>(1);
+
+  const handleDecrease = () => setQuantity((prev) => Math.max(1, prev - 1));
+  const handleIncrease = () => setQuantity((prev) => prev + 1);
 
   return (
     <div className="bg-white p-4 rounded-2xl flex flex-col">
-      <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded-xl" />
+      {product.image ? (
+        <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded-xl" />
+      ) : (
+        <div className="w-full h-40 bg-gray-200 rounded-xl flex items-center justify-center">
+          <span className="text-gray-500">No image available</span>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mt-2">
         <h3 className="text-lg font-semibold">{product.name}</h3>
         <Bookmark className="text-[#000000] cursor-pointer" onClick={() => onBookmark(product.id)} />
       </div>
+      
       <p className="text-gray-500 text-sm">{product.variant}</p>
+      
       <div className="mt-1 flex items-center">
         <span className="text-lg font-bold text-[#000000]">{product.price}</span>
         {product.oldPrice && <span className="text-[#FC0000] line-through ml-2">{product.oldPrice}</span>}
       </div>
+      
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center border px-2 py-1 border-[#096036] rounded-full">
-          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-1 text-[#096036]">
+          <button onClick={handleDecrease} className="p-1 text-[#096036]">
             <Minus size={16} />
           </button>
           <span className="px-3">{quantity}</span>
-          <button onClick={() => setQuantity(quantity + 1)} className="p-1 text-[#096036]">
+          <button onClick={handleIncrease} className="p-1 text-[#096036]">
             <Plus size={16} />
           </button>
         </div>

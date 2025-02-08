@@ -45,7 +45,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       </div>
       <p className="text-gray-500 text-sm">{product.variant}</p>
       <div className="mt-1 flex items-center">
-        <span className="text-lg font-bold text-[#000000]">₦{product.price}</span>
+        <span className="text-lg font-bold text-[#000000]">{product.price}</span>
       </div>
       <div className="flex items-center justify-between mt-3">
         <div className="flex items-center border border-[#096036] px-2 py-1 rounded-full">
